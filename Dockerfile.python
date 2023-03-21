@@ -2,5 +2,5 @@ FROM python:3.9-slim-buster
 
 WORKDIR /app
 
-RUN apt install -y curl
+RUN apk add curl
 COPY requirements.txt .

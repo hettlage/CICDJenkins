@@ -1,9 +1,18 @@
-podTemplate(containers: [containerTemplate(name: 'maven', image: 'maven', command: 'sleep', args: 'infinity')]) {
-  node(POD_LABEL) {
-    checkout scm
-    container('maven') {
-      sh 'mvn -B -ntp -Dmaven.test.failure.ignore verify'
+pipeline {
+  agent {
+    dockerfile {
+      filename 'Dockerfile.python'
     }
-    junit '**/target/surefire-reports/TEST-*.xml'
+  }
+  stages {
+    stage("Build") {
+      steps {
+        withEnv(["HOME=${env.WORKSPACE}"]) {
+          sh 'ls -l'
+          sh 'python -V'
+          sh 'pip install -r requirements.txt'
+        }
+      }
+    }
   }
 }
